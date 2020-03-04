@@ -9,6 +9,7 @@ import plotly.offline as po
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
+from dash.dependencies import Output
 import time
 from datetime import datetime
 
@@ -83,14 +84,15 @@ app.layout = html.Div(dcc.Tabs(id="tabs", children=[
             id='region-dropdown',
             options=[{'label':region, 'value':region} for region in regions],
             value = list(regionDict.keys()),
-            multi=True
+            multi=True,
+            style=dict(width='400px')
             ),
         dcc.Dropdown(
             id='country-dropdown',
             multi=True
             ),
         dcc.Graph(id='timeline_view'),
-        dcc.Dropdown(id='timeline_type', options = [{'label':t, 'value':t} for t in type_list],value='confirmed',multi=False ),
+        dcc.Dropdown(id='timeline_type', options = [{'label':t, 'value':t} for t in type_list],value='confirmed',multi=False, style=dict(width='400px') ),
         dcc.Graph(id='timeline_country_bar'),
         ]),
     dcc.Tab(label='Global View', children=[
@@ -143,7 +145,7 @@ def country_view(g_country):
     dfc=pd.pivot_table(dfc,index=['type','date'],values='value',aggfunc='sum')
     dfc=dfc.reset_index()
     fig = px.line(dfc,x='date',y='value',color='type')
-    fig.update_layout(title= ', '.join(g_country))
+    fig.update_layout(title= 'Combined cases for selected countries')
     return fig
 
 #graph cases over time for selected countries
