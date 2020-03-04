@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created on Mon Mar  2 10:24:34 2020
 
-@author: u379834
 """
 
 import pandas as pd
@@ -21,8 +19,8 @@ server = app.server
 
 
 #read in saved data and merge
-df=pd.read_pickle('C:/Users/u379834/Documents/GitHub/Covid-19/data.pkl')
-countries = pd.read_pickle('C:/Users/u379834/Documents/GitHub/Covid-19/countrycodes.pkl')
+df=pd.read_csv('https://raw.githubusercontent.com/nmrittweger/covid-19/master/data.csv')
+countries = pd.read_csv('https://raw.githubusercontent.com/nmrittweger/covid-19/master/countrycodes.csv')
 df=pd.merge(df, countries, how='left', on='Country')
 df['date']=pd.to_datetime(df['date'])
 df['year']=df['date'].dt.year

@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Mar  4 12:53:34 2020
-
-@author: u379834
+Run this to save Covid data from ccse and corresponding country codes from pycountry to a local file.
+These are then saved to github as basis for the dashboard
 """
 import pandas as pd
 import pycountry
 
-def import_data():
+
+def import_data(localpath):
     #import data from CSSE
     confirmed = pd.read_csv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv')
     recovered = pd.read_csv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Recovered.csv')
@@ -32,10 +32,10 @@ def import_data():
     df=df.stack()
     df=df.reset_index()
     df.columns=['City','Country','Long','Lat','date','type','value']
-    df.to_csv('C:/Users/u379834/Documents/GitHub/Covid-19/covid-19/data.csv')
+    df.to_csv(localpath)
     return df
 
-def update_country_isocodes(df):
+def update_country_isocodes(df,localpath):
     #use pycountry to get iso_3 codes
     countries = pd.DataFrame(df['Country'].unique())
     countries.columns=['Country']
@@ -45,9 +45,9 @@ def update_country_isocodes(df):
     #lookup region data from iso_3 codes
     regions = pd.read_csv('https://raw.githubusercontent.com/lukes/ISO-3166-Countries-with-Regional-Codes/master/all/all.csv')
     countries=pd.merge(countries, regions, how='left', on='alpha-3')
-    countries.to_csv('C:/Users/u379834/Documents/GitHub/Covid-19/covid-19/countrycodes.csv')
+    countries.to_csv(localpath)
     return
 
 #refresh data
-df=import_data()
-countries = update_country_isocodes(df)
+df=import_data('YOUR_LOCAL_PATH_AND_FILENAME_FOR_COVID_DATA.csv')
+countries = update_country_isocodes(df,'YOUR_LOCAL_PATH_AND_FILENAME_FOR_COUNTRY_DATA.csv')
